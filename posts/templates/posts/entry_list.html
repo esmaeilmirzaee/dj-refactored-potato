@@ -7,12 +7,23 @@
 <body>
 {% for post in object_list %}
     <h1 style="text-align: center">{{ random_integer }}</h1>
-    <br />
-    <br />
+    <br/>
+    <br/>
+    {# Working with different filters in a template #}
+    <div class="">
+    <span style="margin: 0 10px;">
+        {{ post.pub_date|timesince }}
+    </span>
+        <span style="margin: 0 10px;">
+            {{ post.mod_date|date:'y-m-d' }}
+        </span>
+    </div>
     <h1>
-        {{ post.headline }}
+        {{ post.headline|title }}
     </h1>
-    <p>{{ post.mod_date }}</p>
+    <p>
+        {{ post.body_text }}
+    </p>
 {% endfor %}
 </body>
 </html>
