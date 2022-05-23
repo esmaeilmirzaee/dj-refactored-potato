@@ -4,6 +4,7 @@ from datetime import date, datetime
 from django.views import View, generic
 from .models import Entry
 
+import random
 
 def dummy_view(request):
     now = datetime.utcnow()
@@ -23,9 +24,26 @@ class PostView(View):
 
 
 # Generic class-based view
-class EntryDetailView(generic.ListView):
+class EntryView(generic.ListView):
     model = Entry
     context_object_name = 'object_list'
     template_name = 'entry_list'
 
+    # add new variable to the current context
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['random_integer'] = random.randint(1, 100)
+        return context
 
+    # define a new query set
+    def get_queryset(self):
+        # filtering
+        return Entry.objects.filter(id=1)
+
+
+class EntryDetailView(generic.DetailView):
+    model = Entry
+
+    def get_object(self, queryset=None):
+        obj = super().get_object()
+        return obj
