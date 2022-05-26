@@ -1,0 +1,20 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% for blog in object_list %}
+    <div class="">
+        <h1>{{ blog.name }}</h1>
+        {% if blog.image.url is not None %}
+            <img src="{% static blog.image.url %}" alt="{{ blog.name }}" width="400px" />
+            <p>{{ blog.image }}</p>
+            <p>{{ blog.image.url }}</p>
+        {% endif %}
+    </div>
+{% endfor %}
+</body>
+</html>

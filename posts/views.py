@@ -1,10 +1,14 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from datetime import date, datetime
 from django.views import View, generic
-from .models import Entry
 
 import random
+
+
+from .models import Entry, Blog
+from .forms import BlogModelForm
+
 
 def dummy_view(request):
     now = datetime.utcnow()
@@ -47,3 +51,31 @@ class EntryDetailView(generic.DetailView):
     def get_object(self, queryset=None):
         obj = super().get_object()
         return obj
+
+
+def new_blog_view(request):
+    form = BlogModelForm(request.POST or None, request.FILES or None)
+    e = Blog.objects.all()
+    for i in e:
+        if i.image is not None:
+            print('images: ', i.image)
+    if form.is_valid():
+        print('new blog view',
+              form.cleaned_data.get('name'),
+              form.cleaned_data.get('tagline'),
+              form.cleaned_data.get('image')
+              )
+        form.save()
+        return redirect('entries:blog-list')
+
+    context = {
+        'form': form,
+    }
+
+    return render(request, 'new_post.html', context)
+
+
+# A CBV to get all the posts
+class BlogListView(generic.ListView):
+    model = Blog
+
