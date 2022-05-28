@@ -1,3 +1,5 @@
+{% load humanize %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,7 +14,7 @@
     {# Working with different filters in a template #}
     <div class="">
     <span style="margin: 0 10px;">
-        {{ post.pub_date|timesince }}
+        {{ post.pub_date|timesince|naturaltime }}
     </span>
         <span style="margin: 0 10px;">
             {{ post.mod_date|date:'y-m-d' }}
@@ -22,8 +24,17 @@
         {{ post.headline|title }}
     </h1>
     <p>
-        {{ post.body_text }}
+        {{ post.body_text }} {{ '100000 views'|intcomma|intword }}
     </p>
+
+    <br/>
+    <br/>
+    <br/>
+    {% for author in post.authors.all %}
+        <p>
+            {{ author }}'s {{ object_list|length|ordinal }} post.
+        </p>
+    {% endfor %}
 {% endfor %}
 </body>
 </html>
